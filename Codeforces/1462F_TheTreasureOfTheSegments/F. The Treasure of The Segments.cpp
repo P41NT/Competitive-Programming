@@ -1,0 +1,307 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+namespace __DEBUG_UTIL__
+{
+    using namespace std;
+    /* Primitive Datatypes Print */
+    void print(const char *x) { cerr << x; }
+    void print(bool x) { cerr << (x ? "T" : "F"); }
+    void print(char x) { cerr << '\'' << x << '\''; }
+    void print(signed short int x) { cerr << x; }
+    void print(unsigned short int x) { cerr << x; }
+    void print(signed int x) { cerr << x; }
+    void print(unsigned int x) { cerr << x; }
+    void print(signed long int x) { cerr << x; }
+    void print(unsigned long int x) { cerr << x; }
+    void print(signed long long int x) { cerr << x; }
+    void print(unsigned long long int x) { cerr << x; }
+    void print(float x) { cerr << x; }
+    void print(double x) { cerr << x; }
+    void print(long double x) { cerr << x; }
+    void print(string x) { cerr << '\"' << x << '\"'; }
+    template <size_t N>
+    void print(bitset<N> x) { cerr << x; }
+    void print(vector<bool> v)
+    { /* Overloaded this because stl optimizes vector<bool> by using
+          _Bit_reference instead of bool to conserve space. */
+        int f = 0;
+        cerr << '{';
+        for (auto &&i : v)
+            cerr << (f++ ? "," : "") << (i ? "T" : "F");
+        cerr << "}";
+    }
+    /* Templates Declarations to support nested datatypes */
+    template <typename T>
+    void print(T &&x);
+    template <typename T>
+    void print(vector<vector<T>> mat);
+    template <typename T, size_t N, size_t M>
+    void print(T (&mat)[N][M]);
+    template <typename F, typename S>
+    void print(pair<F, S> x);
+    template <typename T, size_t N>
+    struct Tuple;
+    template <typename T>
+    struct Tuple<T, 1>;
+    template <typename... Args>
+    void print(tuple<Args...> t);
+    template <typename... T>
+    void print(priority_queue<T...> pq);
+    template <typename T>
+    void print(stack<T> st);
+    template <typename T>
+    void print(queue<T> q);
+    /* Template Datatypes Definitions */
+    template <typename T>
+    void print(T &&x)
+    {
+        /*  This works for every container that supports range-based loop
+            i.e. vector, set, map, oset, omap, dequeue */
+        int f = 0;
+        cerr << '{';
+        for (auto &&i : x)
+            cerr << (f++ ? "," : ""), print(i);
+        cerr << "}";
+    }
+    template <typename T>
+    void print(vector<vector<T>> mat)
+    {
+        int f = 0;
+        cerr << "\n~~~~~\n";
+        for (auto &&i : mat)
+        {
+            cerr << setw(2) << left << f++, print(i), cerr << "\n";
+        }
+        cerr << "~~~~~\n";
+    }
+    template <typename T, size_t N, size_t M>
+    void print(T (&mat)[N][M])
+    {
+        int f = 0;
+        cerr << "\n~~~~~\n";
+        for (auto &&i : mat)
+        {
+            cerr << setw(2) << left << f++, print(i), cerr << "\n";
+        }
+        cerr << "~~~~~\n";
+    }
+    template <typename F, typename S>
+    void print(pair<F, S> x)
+    {
+        cerr << '(';
+        print(x.first);
+        cerr << ',';
+        print(x.second);
+        cerr << ')';
+    }
+    template <typename T, size_t N>
+    struct Tuple
+    {
+        static void printTuple(T t)
+        {
+            Tuple<T, N - 1>::printTuple(t);
+            cerr << ",", print(get<N - 1>(t));
+        }
+    };
+    template <typename T>
+    struct Tuple<T, 1>
+    {
+        static void printTuple(T t) { print(get<0>(t)); }
+    };
+    template <typename... Args>
+    void print(tuple<Args...> t)
+    {
+        cerr << "(";
+        Tuple<decltype(t), sizeof...(Args)>::printTuple(t);
+        cerr << ")";
+    }
+    template <typename... T>
+    void print(priority_queue<T...> pq)
+    {
+        int f = 0;
+        cerr << '{';
+        while (!pq.empty())
+            cerr << (f++ ? "," : ""), print(pq.top()), pq.pop();
+        cerr << "}";
+    }
+    template <typename T>
+    void print(stack<T> st)
+    {
+        int f = 0;
+        cerr << '{';
+        while (!st.empty())
+            cerr << (f++ ? "," : ""), print(st.top()), st.pop();
+        cerr << "}";
+    }
+    template <typename T>
+    void print(queue<T> q)
+    {
+        int f = 0;
+        cerr << '{';
+        while (!q.empty())
+            cerr << (f++ ? "," : ""), print(q.front()), q.pop();
+        cerr << "}";
+    }
+    /* Printer functions */
+    void printer(const char *) {} /* Base Recursive */
+    template <typename T, typename... V>
+    void printer(const char *names, T &&head, V &&...tail)
+    {
+        /* Using && to capture both lvalues and rvalues */
+        int i = 0;
+        for (size_t bracket = 0; names[i] != '\0' and (names[i] != ',' or bracket != 0); i++)
+            if (names[i] == '(' or names[i] == '<' or names[i] == '{')
+                bracket++;
+            else if (names[i] == ')' or names[i] == '>' or names[i] == '}')
+                bracket--;
+        cerr.write(names, i) << " = ";
+        print(head);
+        if (sizeof...(tail))
+            cerr << " ||", printer(names + i + 1, tail...);
+        else
+            cerr << "]\n";
+    }
+    /* PrinterArr */
+    void printerArr(const char *) {} /* Base Recursive */
+    template <typename T, typename... V>
+    void printerArr(const char *names, T arr[], size_t N, V... tail)
+    {
+        size_t ind = 0;
+        for (; names[ind] and names[ind] != ','; ind++)
+            cerr << names[ind];
+        for (ind++; names[ind] and names[ind] != ','; ind++)
+            ;
+        cerr << " = {";
+        for (size_t i = 0; i < N; i++)
+            cerr << (i ? "," : ""), print(arr[i]);
+        cerr << "}";
+        if (sizeof...(tail))
+            cerr << " ||", printerArr(names + ind + 1, tail...);
+        else
+            cerr << "]\n";
+    }
+}
+#ifndef ONLINE_JUDGE
+#define debug(...) std::cerr << __LINE__ << ": [", __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
+#define debugArr(...) std::cerr << __LINE__ << ": [", __DEBUG_UTIL__::printerArr(#__VA_ARGS__, __VA_ARGS__)
+#else
+#define debug(...)
+#define debugArr(...)
+#endif
+
+#define endl "\n"
+#define int long long int
+
+inline bool cmp(pair<int, int> a, pair< int, int> b) {
+    return a.second < b.second;
+}
+
+vector<pair<int, int>> merge(vector<pair<int, int>> &v1, vector<pair<int, int>> &v2) {
+
+    vector<pair<int, int>> v;
+    int i = 0, j = 0;
+    while (i < v1.size() && j < v2.size()) {
+        if (v1[i] <= v2[j]) v.push_back(v1[i++]);
+        else v.push_back(v2[j++]);
+    }
+
+    for (int k = i; k < v1.size(); k++) v.push_back(v1[k]);
+    for (int k = j; k < v2.size(); k++) v.push_back(v2[k]);
+
+    return v;
+}
+
+void buildTree(vector<vector<pair<int, int>>> &tree, 
+        vector<pair<int, int>> &arr, int index, int start, int end) {
+
+    if (start == end) {
+        tree[index].push_back(arr[start]);
+        return;
+    }
+
+    int mid = (start + end) >> 1;
+    buildTree(tree, arr, 2 * index + 1, start, mid);
+    buildTree(tree, arr, 2 * index + 2, mid + 1, end);
+
+    tree[index] = merge(tree[2 * index + 1], tree[2 * index + 2]);
+
+}
+
+//find number of l2 <= r1
+int query(vector<vector<pair<int, int>>> &tree, int index, int start, int end,
+        int left, int right, int k) {
+    if (right < start || left > end) return 0;
+
+    if (start >= left && end <= right) {
+        int l = 0, r = tree[index].size() - 1;
+        int ans = 0;
+        while (l <= r) {
+            int md = (l + r) >> 1;
+            if (tree[index][md].first <= k) {
+                ans = max(ans, md + 1);
+                l = md + 1;
+            }
+            else r = md - 1;
+        }
+        return ans;
+    }
+
+    int mid = (start + end) >> 1;
+    return query(tree, 2 * index + 1, start, mid, left, right, k) +
+           query(tree, 2 * index + 2, mid + 1, end, left, right, k);
+}
+
+
+void solve() {
+    int n;
+    cin >> n;
+
+    vector<pair<int, int>> arr(n);
+    for (int i = 0; i < n; i++) cin >> arr[i].first >> arr[i].second;
+    sort(arr.begin(), arr.end(), cmp);
+
+    vector<vector<pair<int, int>>> tree(4 * n + 5);
+    buildTree(tree, arr, 0, 0, n - 1);
+
+
+    int maxCount = 0;
+    for (int i = 0; i < n; i++) {
+        int count = 0;
+        if (i != 0) {
+            int l = 0, r = i - 1;
+            int ans = i;
+            while (l <= r) {
+                int mid = (l + r) >> 1;
+                if (arr[mid].second >= arr[i].first) {
+                    ans = min(i, mid);
+                    r = mid - 1;
+                }
+                else l = mid + 1;
+            }
+            ans = i - ans;
+            count += ans;
+        }
+        if (i != n - 1) {
+            int ans = query(tree, 0, 0, n - 1, i + 1, n - 1, arr[i].second);
+            debug(i, ans);
+            count += ans;
+        }
+        maxCount = max(maxCount, count);
+    }
+
+    cout << n - maxCount - 1 << endl;
+}
+
+int32_t main () {
+	ios_base::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0);
+
+	int t = 1;
+	cin >> t;
+	while ( t-- ) {
+		solve();
+	}
+}
+

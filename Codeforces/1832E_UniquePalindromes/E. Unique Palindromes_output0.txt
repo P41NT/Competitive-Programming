@@ -1,0 +1,12 @@
+YES
+ddabceabca
+YES
+foo
+YES
+ayda
+YES
+wada
+NO
+YES
+abcbcacbab
+NO
