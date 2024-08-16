@@ -226,6 +226,22 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n, k;
+    cin >> n >> k;
+
+    string s;
+    cin >> s;
+
+    string t = s;
+
+    while (k--) {
+        for (int i = 0; i < n - 1; i++) {
+            if (s[i] == 'B' && s[i + 1] == 'G') swap(t[i], t[i + 1]);
+        }
+        s = t;
+    }
+
+    cout << s << endl;
 }
 
 int32_t main () {
@@ -233,7 +249,7 @@ int32_t main () {
 	cin.tie(0); cout.tie(0);
 
 	int t = 1;
-	cin >> t;
+	// cin >> t;
 	while ( t-- ) {
 		solve();
 	}

@@ -224,19 +224,67 @@ mi inv(mi a) {
 }
 mi operator/(mi a, mi b) { return a * inv(b); }
 
+const int inf = 1e18;
+
+struct edge {
+    int u, v, c, f;
+};
 
 void solve() {
+    int n, m;
+    cin >> n >> m;
+
+    vector<edge> edges(m);
+    vector<int> flows;
+    for (int i = 0; i < m; i++) {
+        cin >> edges[i].u >> edges[i].v >> edges[i].c >> edges[i].f; 
+        flows.push_back(edges[i].f);
+    }
+
+    int ans = 0;
+    for (auto flow : flows) {
+        vector<vector<pair<int, int>>> adj(n + 1);
+        for (auto [u, v, c, f] : edges) {
+            if (f < flow) continue;
+            adj[u].push_back({v, c});
+            adj[v].push_back({u, c});
+        }
+
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        pq.push({ 0, 1 });
+        vector<int> dist(n + 1, inf);
+        dist[1] = 0;
+        while (!pq.empty()) {
+            auto [_, node] = pq.top();
+            pq.pop();
+            for (auto [next, len] : adj[node]) {
+                if (dist[node] + len < dist[next]) {
+                    dist[next] = len + dist[node];
+                    pq.push({dist[next], next});
+                }
+            }
+        }
+        if (dist[n] == inf) continue;
+
+
+        int res = 1e6 * flow / dist[n];
+        ans = max(ans, res);
+    }
+
+    cout << ans << endl;
 }
 
 int32_t main () {
 	ios_base::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
+    freopen("pump.in", "r", stdin);
+    freopen("pump.out", "w", stdout);
+
 	int t = 1;
-	cin >> t;
+	// cin >> t;
 	while ( t-- ) {
 		solve();
 	}
 }
-
 

@@ -226,7 +226,14 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
-	// code goes here 
+    int xc, yc, k;
+    cin >> xc >> yc >> k;
+
+    if (k & 1) cout << xc << " " << yc << endl;
+    for (int i = 1; i <= k/2; i++) {
+        cout << (xc + i) << " " << yc << endl;
+        cout << (xc - i) << " " << yc << endl;
+    }
 }
 
 int32_t main () {
@@ -234,7 +241,7 @@ int32_t main () {
 	cin.tie(0); cout.tie(0);
 
 	int t = 1;
-	// cin >> t;
+	cin >> t;
 	while ( t-- ) {
 		solve();
 	}

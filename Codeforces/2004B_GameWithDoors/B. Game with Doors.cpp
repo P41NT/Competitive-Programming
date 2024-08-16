@@ -224,8 +224,59 @@ mi inv(mi a) {
 }
 mi operator/(mi a, mi b) { return a * inv(b); }
 
+bool cmp(pair<int, int> a, pair<int, int> b) {
+    if (a.first == b.first) {
+        return a.second > b.second;
+    }
+    return a.first < b.first;
+}
 
 void solve() {
+    pair<int, int> a; pair<int, int> b;
+    cin >> a.first >> a.second >> b.first >> b.second;
+
+    int overlap = min(a.second, b.second) - max(a.first, b.first);
+    if (overlap < 0) {
+        cout << 1 << endl;
+    }
+    else if (overlap == 0) {
+        cout << 2 << endl;
+    }
+    else {
+        if (a.first < b.first) {
+            if (a.second < b.second){
+                cout << a.second - b.first + 2 << endl;
+            }
+            else if (a.second == b.second) {
+                cout << a.second - b.first + 1 << endl;
+            }
+            else if (a.second > b.second) {
+                cout << b.second - b.first + 2 << endl;
+            }
+        }
+        else if (a.first == b.first) {
+            if (a.second < b.second){
+                cout << a.second - a.first + 1 << endl;
+            }
+            else if (a.second == b.second) {
+                cout << a.second - a.first << endl;
+            }
+            else if (a.second > b.second) {
+                cout << b.second - b.first + 1 << endl;
+            }
+        }
+        else {
+            if (a.second < b.second){
+                cout << a.second - a.first + 2 << endl;
+            }
+            else if (a.second == b.second) {
+                cout << a.second - a.first + 1 << endl;
+            }
+            else if (a.second > b.second) {
+                cout << b.second - a.first + 2 << endl;
+            }
+        }
+    }
 }
 
 int32_t main () {

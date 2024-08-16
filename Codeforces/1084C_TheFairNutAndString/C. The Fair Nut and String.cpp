@@ -33,6 +33,7 @@ void solve() {
     ans = (mod + ans - 1) % mod;
 
     cout << ans << endl;
+
 }
 
 int32_t main () {

@@ -224,8 +224,39 @@ mi inv(mi a) {
 }
 mi operator/(mi a, mi b) { return a * inv(b); }
 
-
 void solve() {
+    int n, k;
+    cin >> n >> k;
+
+    vector<pair<int, int>> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i].first >> arr[i].second;
+        if (arr[i].first > arr[i].second) swap(arr[i].first, arr[i].second);
+
+    }
+
+    vector<vector<int>> cost(n, vector<int>(100 + 100 + 5, INT_MAX));
+
+    for (int i = 0; i < n; i++) {
+        for (int r = 0; r <= arr[i].first; r++) 
+            for (int c = 0; c <= arr[i].second; c++) 
+                cost[i][r + c] = min(cost[i][r + c], r * arr[i].second + c * arr[i].first - r * c);
+    }
+
+    vector<vector<int>> dp(n, vector<int>(k + 1, INT_MAX));
+
+    for (int i = 0; i < n; i++) dp[i][0] = 0;
+    for (int j = 0; j <= k; j++) { dp[0][j] = cost[0][j]; }
+
+    for (int i = 1; i < n; i++) {
+        for (int j = 0; j <= k; j++) {
+            for (int l = 0; l <= j; l++) {
+                dp[i][j] = min(dp[i][j], dp[i - 1][j - l] + cost[i][l]);
+            }
+        }
+    }
+
+    cout << (dp[n - 1][k] == INT_MAX ? -1 : dp[n - 1][k]) << endl;
 }
 
 int32_t main () {

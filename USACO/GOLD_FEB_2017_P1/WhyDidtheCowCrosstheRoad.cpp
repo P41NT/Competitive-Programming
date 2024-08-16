@@ -226,17 +226,92 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n, t;
+    cin >> n >> t;
+
+    vector<vector<int>> arr(n, vector<int>(n));
+
+    int dir_x[] = {3, 2, 1, 0,-1,-2};
+    int dir_y[] = {0, 1, 2, 3, 2, 1};
+
+    vector<vector<pair<int, int>>> adj(n*n);
+
+    for (int i = 0; i < n; i++) 
+        for (int j = 0; j < n; j++) cin >> arr[i][j];
+
+    auto hash = [&](int x, int y) -> int { return x * n + y; };
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            for (int k = 0; k < 6; k++) {
+                int newi = i + dir_x[k];
+                int newj = j + dir_y[k];
+
+                if (newi < 0 || newi >= n || newj < 0 || newj >= n) continue;
+                int u = hash(i, j);
+                int v = hash(newi, newj);
+
+                int len1 = 3 * t + arr[newi][newj];
+                int len2 = 3 * t + arr[i][j];
+
+                adj[u].push_back({v, len1});
+                adj[v].push_back({u, len2});
+            }
+        }
+    }
+
+    int final_x[] = {0, -1, 0, -1, -2};
+    int final_y[] = {-1, 0, -2, -1, 0};
+
+    for (int k = 0; k < 6; k++) {
+        int i = n - 1, j = n - 1;
+        int newi = i + final_x[k];
+        int newj = j + final_y[k];
+
+        if (newi < 0 || newj >= n || newj < 0 || newj >= n) continue;
+
+        int u = hash(i, j);
+        int v = hash(newi, newj);
+
+        int len = t * (abs(newi - i) + abs(newj - j));
+        adj[u].push_back({v, len});
+        adj[v].push_back({u, len});
+    }
+    const int inf = 1e18;
+
+    int dest = n * n - 1;
+    vector<int> dist(n*n, inf);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push({0, 0});
+    dist[0] = 0;
+
+    while (!pq.empty()) {
+        auto [_, node] = pq.top();
+        pq.pop();
+        for (auto [next, len] : adj[node]) {
+            if (dist[node] + len < dist[next]) {
+                dist[next] = dist[node] + len;
+                pq.push({dist[next], next});
+            }
+        }
+    }
+
+    // debug(adj);
+
+    cout << dist[dest] << endl;
 }
 
 int32_t main () {
 	ios_base::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
+    freopen("visitfj.in", "r", stdin);
+    freopen("visitfj.out", "w", stdout);
+
 	int t = 1;
-	cin >> t;
+	// cin >> t;
 	while ( t-- ) {
 		solve();
 	}
 }
-
 

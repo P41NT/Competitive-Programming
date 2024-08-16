@@ -226,6 +226,32 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n + 1);
+    for (int i = 1; i <= n; i++) cin >> arr[i];
+    vector<bool> visited(n + 2);
+
+    map<int, int> mp;
+    for (int i = 1; i <= n; i++) mp[i] = arr[i];
+
+    bool first = true;
+    for (auto s : mp) {
+        if (first) {
+            visited[s.second] = true;
+            first = false;
+        }
+        else {
+            if (visited[s.second + 1] || visited[s.second - 1])
+                visited[s.second] = true;
+            else {
+                cout << "NO" << endl;
+                return;
+            }
+        }
+    }
+    cout << "YES" << endl;
 }
 
 int32_t main () {

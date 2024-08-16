@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -226,6 +227,87 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n, k;
+    cin >> n >> k;
+
+    vector<string> arr(n + 1);
+    unordered_map<string, vector<int>> mp;
+    for (int i = 1; i <= n; i++) {
+        cin >> arr[i];
+        mp[arr[i]].push_back(i);
+    }
+
+    for (auto &s : mp) 
+        sort(s.second.begin(), s.second.end());
+
+    while (k--) {
+        int a, b;
+        cin >> a >> b;
+
+        if (a > b) swap(a, b);
+
+        string u = arr[a];
+        string v = arr[b];
+
+        if (a == b) {
+            cout << 0 << endl;
+            continue;
+        }
+
+        char p = u[0], q = u[1], r = v[0], s = v[1];
+        if (p == r || p == s || q == r || q == s) {
+            cout << b - a << endl;
+            continue;
+        }
+
+        auto checkrange = [&](vector<int> &ar, int u, int v) -> bool {
+            int lower = 0, higher = ar.size() - 1;
+            while (lower <= higher) {
+                int mid = (lower + higher) >> 1;
+                if (ar[mid] > v) {
+                    higher = mid - 1;
+                }
+                else if (ar[mid] < u) {
+                    lower = mid + 1;
+                }
+                else return true;
+            }
+            return false;
+        };
+
+        auto contains = [&](string s, string c) -> bool {
+            if (s[0] == c[0] || s[1] == c[0] || s[0] == c[1] || s[1] == c[1]) return true;
+            return false;
+        };
+
+        bool flag = false;
+        for (auto &[check, ar] : mp) {
+            if (contains(check, u) && contains(check, v)) {
+                if (checkrange(ar, a, b)) {
+                    cout << b - a << endl;
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (flag) continue;
+
+        int ans = INT_MAX;
+        for (auto &[check, ar] : mp) {
+            if (contains(check, u) && contains(check, v)) {
+                auto lb = lower_bound(ar.begin(), ar.end(), b);
+                if (lb != ar.end()) ans = min(ans, *lb - a + *lb - b);
+                auto ub = lower_bound(ar.begin(), ar.end(), a);
+                if (ub != ar.begin()) {
+                    --ub;
+                    ans = min(ans, a - *ub + b - *ub);
+                }
+            }
+        }
+
+        if (ans == INT_MAX) cout << -1 << endl;
+        else cout << ans << endl;
+    }
 }
 
 int32_t main () {
@@ -233,10 +315,11 @@ int32_t main () {
 	cin.tie(0); cout.tie(0);
 
 	int t = 1;
-	cin >> t;
+	// cin >> t;
 	while ( t-- ) {
 		solve();
 	}
 }
+
 
 

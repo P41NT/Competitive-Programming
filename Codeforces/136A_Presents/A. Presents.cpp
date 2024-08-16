@@ -226,6 +226,19 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n + 1);
+    map<int, int> mp;
+    for (int i = 1; i <= n; i++) {
+        cin >> arr[i];
+        mp[arr[i]] = i;
+    }
+
+    for (int i = 1; i <= n; i++) 
+        cout << mp[i] << " ";
+    cout << endl;
 }
 
 int32_t main () {
@@ -233,7 +246,7 @@ int32_t main () {
 	cin.tie(0); cout.tie(0);
 
 	int t = 1;
-	cin >> t;
+	// cin >> t;
 	while ( t-- ) {
 		solve();
 	}

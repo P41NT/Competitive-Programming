@@ -226,6 +226,40 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n, m, k;
+    cin >> n >> m >> k;
+
+    int w;
+    cin >> w;
+
+    vector<int> arr(w);
+    for (int i = 0; i < w; i++) cin >> arr[i];
+
+    vector<int> pos;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            int starti = max(1ll, i + 1 - (n - k));
+            int endi   = min(k, i + 1);
+            int numi = endi - starti + 1;
+
+            int startj = max(1ll, j + 1 - (m - k));
+            int endj   = min(k, j + 1);
+            int numj = endj - startj + 1;
+
+            pos.push_back(numi * numj);
+        }
+    }
+
+
+    sort(pos.begin(), pos.end(), greater<int>());
+    sort(arr.begin(), arr.end(), greater<int>());
+
+    int ans = 0;
+    for (int i = 0; i < w; i++) 
+        ans += pos[i] * arr[i];
+
+    cout << ans << endl;
 }
 
 int32_t main () {

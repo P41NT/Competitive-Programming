@@ -226,6 +226,30 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n;
+    cin >> n;
+
+    int req = 0;
+    while (n) {
+        int dig = n % 10;
+        if (dig == 4 || dig == 7) req++;
+        n /= 10;
+    }
+
+    if (req == 0) {
+        cout << "NO" << endl;
+        return;
+    }
+
+    while (req) {
+        int dig = req % 10;
+        if (dig != 4 && dig != 7) {
+            cout << "NO" << endl;
+            return;
+        }
+        req /= 10;
+    }
+    cout << "YES" << endl;
 }
 
 int32_t main () {
@@ -233,7 +257,7 @@ int32_t main () {
 	cin.tie(0); cout.tie(0);
 
 	int t = 1;
-	cin >> t;
+	// cin >> t;
 	while ( t-- ) {
 		solve();
 	}

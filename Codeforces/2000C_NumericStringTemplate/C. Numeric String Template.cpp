@@ -226,6 +226,49 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) cin >> arr[i];
+
+    int t;
+    cin >> t;
+    while (t--) {
+        string s;
+        cin >> s;
+
+        if (s.length() != arr.size()) {
+            cout << "NO" << endl;
+            continue;
+        }
+
+        map<int, char> mp;
+        map<char, int> mp2;
+        bool works = true;
+
+        for (int i = 0; i < n; i++) {
+            if (mp.count(arr[i])) {
+                if (s[i] != mp[arr[i]]) {
+                    cout << "NO" << endl;
+                    works = false;
+                    break;
+                }
+            }
+            if (mp2.count(s[i])) {
+                if (arr[i] != mp2[s[i]]) {
+                    cout << "NO" << endl;
+                    works = false;
+                    break;
+                }
+            }
+            else {
+                mp[arr[i]] = s[i];
+                mp2[s[i]] = arr[i];
+            }
+        }
+        if (works) cout << "YES" << endl;
+    }
 }
 
 int32_t main () {

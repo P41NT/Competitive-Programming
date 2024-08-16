@@ -224,8 +224,81 @@ mi inv(mi a) {
 }
 mi operator/(mi a, mi b) { return a * inv(b); }
 
+int n, m;
+vector<vector<int>> arr;
+
+int encode(int i, int j) { return i * m + j; }
+pair<int, int> decode(int x) { return { x / m, x % m }; }
+
+class DSU {
+    vector<int> parent;
+    vector<int> sz;
+    vector<vector<int>> elements;
+
+public:
+    DSU(int n) {
+        parent.resize(n);
+        sz.resize(n, 1);
+        for (int i = 0; i < n; i++) parent[i] = i;
+    }
+    int find(int x) {
+        return (parent[x] == x ? x : parent[x] = find(parent[x]));
+    }
+    bool unite(int x, int y) {
+        x = find(x), y = find(y);
+        if (x == y) return false;
+
+        auto [a1, b1] = decode(x);
+        auto [a2, b2] = decode(y);
+
+        parent[y] = x;
+        sz[x] += sz[y];
+
+        return true;
+    }
+    int size(int x) {
+        return sz[find(x)];
+    }
+};
 
 void solve() {
+    cin >> n >> m;
+
+    arr.resize(n);
+    for (auto &s : arr) s.resize(m);
+
+    vector<pair<int, pair<int, int>>> mountains;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> arr[i][j];
+            mountains.push_back({arr[i][j], {i, j}});
+        }
+    }
+
+    sort(mountains.begin(), mountains.end(), greater<pair<int, pair<int, int>>>());
+
+    int dir_x[] = { -1, 0, 1, 0 };
+    int dir_y[] = { 0, -1, 0, 1 };
+
+    vector<vector<int>> ans(n, vector<int>(m));
+
+    DSU dsu(n);
+    for (auto [height, coord]: mountains) {
+        auto [i, j] = coord;
+        for (int k = 0; k < 4; k++) {
+            int newi = dir_x[k] + i;
+            int newj = dir_x[k] + j;
+
+            if (newi < 0 || newi >= n || newj < 0 || newj >= m) continue;
+            if (arr[newi][newj] < height) continue;
+
+            int u = encode(i, j);
+            int v = encode(newi, newj);
+
+            dsu.unite(u, v);
+        }
+    }
 }
 
 int32_t main () {

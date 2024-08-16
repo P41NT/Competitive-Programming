@@ -226,6 +226,20 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    string n;
+    cin >> n;
+
+    if (n.size() <= 2) {
+        cout << "NO" << endl;
+    }
+    else if (n.size() == 3) {
+        if (n[0] == '1' && n[1] == '0' && n[2] >= '2') cout << "YES" << endl;
+        else cout << "NO" << endl;
+    }
+    else {
+        if (n[0] == '1' && n[1] == '0' && n[2] > '0') cout << "YES" << endl;
+        else cout << "NO" << endl;
+    }
 }
 
 int32_t main () {

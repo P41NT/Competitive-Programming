@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <functional>
 
 using namespace std;
 
@@ -226,6 +227,26 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n, k;
+    cin >> n >> k;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) cin >> arr[i];
+
+    sort(arr.begin(), arr.end(), greater<int>());
+
+    int ans = 0;
+    for (int i = 0; i < n; i += 2) {
+        ans += arr[i];
+        if (i + 1 < n) {
+            int borrow = min(k, arr[i] - arr[i + 1]);
+            arr[i + 1] += borrow;
+            k -= borrow;
+            ans -= arr[i + 1];
+        }
+    }
+
+    cout << ans << endl;
 }
 
 int32_t main () {

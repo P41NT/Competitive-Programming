@@ -226,6 +226,36 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n + 1);
+    vector<int> pref(n + 1);
+    string s;
+    for (int i = 1; i <= n; i++) cin >> arr[i];
+    cin >> s;
+    s = '.' + s;
+
+    for (int i = 1; i <= n; i++) 
+        pref[i] = pref[i - 1] + arr[i];
+
+    vector<pair<int, int>> tocheck;
+    int lower = 1, higher = n;
+    while (lower < higher) {
+        while (lower + 1 < n && s[lower] != 'L') lower++;
+        while (higher - 1 >= 0  && s[higher] != 'R') higher--;
+        if (lower >= higher) break;
+        if (s[lower] != 'L' || s[higher] != 'R') break;
+        tocheck.push_back({lower, higher});
+        lower++, higher--;
+    }
+    reverse(tocheck.begin(), tocheck.end());
+
+    int ans = 0;
+    for (auto s : tocheck) 
+        ans += pref[s.second] - pref[s.first - 1];
+
+    cout << ans << endl;
 }
 
 int32_t main () {

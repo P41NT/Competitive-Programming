@@ -226,6 +226,15 @@ mi operator/(mi a, mi b) { return a * inv(b); }
 
 
 void solve() {
+    string a, b;
+    cin >> a >> b;
+
+    for (auto &s : a) if ('a' <= s && s <= 'z') s -= 32;
+    for (auto &s : b) if ('a' <= s && s <= 'z') s -= 32;
+
+    if (a == b) cout << 0 << endl;
+    else if (a < b) cout << -1 << endl;
+    else cout << 1 << endl;
 }
 
 int32_t main () {
@@ -233,7 +242,7 @@ int32_t main () {
 	cin.tie(0); cout.tie(0);
 
 	int t = 1;
-	cin >> t;
+	// cin >> t;
 	while ( t-- ) {
 		solve();
 	}
