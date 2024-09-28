@@ -195,59 +195,90 @@ namespace __DEBUG_UTIL__
 #define endl "\n"
 #define int long long int
 
-bool checkCycle(int node, vector<vector<int>> &adj, vector<bool> &vis,
-                vector<bool> &dfsvis, vector<int> &toposort) {
-    vis[node] = true;
-    dfsvis[node] = true;
+const int MOD = 998244353;
 
-    for (auto s : adj[node]) {
-    if (!vis[s]) {
-          if (checkCycle(s, adj, vis, dfsvis, toposort))
-              return true;
-    } 
-    else if (dfsvis[s])
-          return true;
-    }
-
-    dfsvis[node] = false;
-    return false;
+struct mi {
+	int v;
+	explicit operator int() const { return v; }
+	mi() { v = 0; }
+	mi(long long _v) : v(_v % MOD) { v += (v < 0) * MOD; }
+};
+mi &operator+=(mi &a, mi b) {
+	if ((a.v += b.v) >= MOD) a.v -= MOD;
+	return a;
 }
+mi &operator-=(mi &a, mi b) {
+	if ((a.v -= b.v) < 0) a.v += MOD;
+	return a;
+}
+mi operator+(mi a, mi b) { return a += b; }
+mi operator-(mi a, mi b) { return a -= b; }
+mi operator*(mi a, mi b) { return mi((long long)a.v * b.v); }
+mi &operator*=(mi &a, mi b) { return a = a * b; }
+mi pow(mi a, long long p) {
+	assert(p >= 0);
+	return p == 0 ? 1 : pow(a * a, p / 2) * (p & 1 ? a : 1);
+}
+mi inv(mi a) {
+	assert(a.v != 0);
+	return pow(a, MOD - 2);
+}
+mi operator/(mi a, mi b) { return a * inv(b); }
+
 
 void solve() {
     int n;
     cin >> n;
 
     vector<vector<int>> adj(n + 1);
-    queue<pair<int, int>> bfs;
-    vector<bool> visited(n + 1, false);
-    vector<int> ans(n + 1, 0);
+    vector<vector<int>> back(n + 1);
+    vector<int> indegree(n + 1);
+    for (int i = 1; i <= n ;i++) {
+        int k;
+        cin >> k;
 
-    for (int i = 1; i <= n; i++) {
-        int m; cin >> m;
-        for (int j = 0; j < m; j++) {
-            int c; cin >> c;
-            adj[c].push_back(i);
-        }
-        if (!m) {
-            bfs.push({i, 0});
-            ans[i] = 1;
+        for (int j = 0; j < k; j++) {
+            int x;
+            cin >> x;
+            adj[x].push_back(i);
+            back[i].push_back(x);
+            indegree[i]++;
         }
     }
 
-    vector<bool> vis(n + 1, false);
-    vector<bool> dfsvis(n + 1, false);
-    bool cycle = false;
+    queue<int> topo;
+    for (int i = 1; i <= n; i++) 
+        if (indegree[i] == 0) topo.push(i);
+
     vector<int> toposort;
-    for (int i = 1; i <= n; i++) {
-        if (vis[i]) continue;
-        cycle |= checkCycle(i, adj, vis, dfsvis, toposort);
-    }
+    while (!topo.empty()) {
+        int first = topo.front();
+        topo.pop();
+        toposort.push_back(first);
 
-    if (cycle) {
+        for (auto s : adj[first]) {
+            if (indegree[s] != 0) indegree[s]--;
+            if (indegree[s] == 0) topo.push(s);
+        }
+    }
+    
+    if (toposort.size() != n) {
         cout << -1 << endl;
         return;
     }
 
+    vector<int> dp(n + 1, 1);
+
+    for (int i = 0; i < n; i++) {
+        int curr = toposort[i];
+        for (auto s : back[curr]) {
+            dp[curr] = max(dp[curr], dp[s] + (s > curr));
+        }
+    }
+    // debug(dp);
+
+    int ans = *max_element(dp.begin(), dp.end());
+    cout << ans << endl;
 }
 
 int32_t main () {
@@ -260,4 +291,5 @@ int32_t main () {
 		solve();
 	}
 }
+
 
