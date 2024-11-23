@@ -1,7 +1,0 @@
-3
-4 a
-aaaa
-4 a
-baaa
-4 b
-bzyx

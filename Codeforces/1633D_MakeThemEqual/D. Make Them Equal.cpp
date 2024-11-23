@@ -1,24 +1,37 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 
 using namespace std;
+using namespace __gnu_pbds;
+
+#ifndef ONLINE_JUDGE
+#include "/home/shobwq/CompetitiveProgramming/debug.cpp"
+#define debug(...) std::cerr << __LINE__ << ": [", __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
+#define debugArr(...) std::cerr << __LINE__ << ": [", __DEBUG_UTIL__::printerArr(#__VA_ARGS__, __VA_ARGS__)
+#else
+#define debug(...)
+#define debugArr(...)
+#endif
 
 #define endl "\n"
 #define int long long int
 
-vector<int> dp(1e3 + 10, INT_MAX);
+template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-void preprocess() {
-    dp[1] = 0;
+const int maxn = 1e3;
+vector<int> pre(maxn + 5, INT_MAX);
 
-    for (int i = 1; i <= 1e3; i++) {
-        for (int k = 1; k <= i; k++) {
-            int j = i + i / k;
-            if (j <= 1e3) dp[j] = min(dp[j], dp[i] + 1);
+void precompute() {
+    pre[1] = 0;
+    for (int i = 1; i <= maxn; i++) {
+        for (int x = 1; x <= i; x++) {
+            int next = i + i / x;
+            if (next <= maxn) pre[next] = min(pre[next], pre[i] + 1);
         }
     }
 }
-
-vector<int> dpknapsack(1e6 + 10, 0);
 
 void solve() {
     int n, k;
@@ -30,43 +43,41 @@ void solve() {
     for (int i = 0; i < n; i++) cin >> b[i];
     for (int i = 0; i < n; i++) cin >> c[i];
 
-
-    vector<pair<int, int>> arr(n);
-    int maxk = 0;
-    for (int i = 0; i < n; i++) {
-        arr[i].first = dp[b[i]];
-        arr[i].second = c[i];
-        maxk += arr[i].first;
+    if (k > 12 * n) {
+        int answer = accumulate(c.begin(), c.end(), 0ll);
+        cout << answer << endl;
+        return;
     }
 
-    k = min(maxk, k);
+    vector<int> arr(n + 1);
+    for (int i = 0; i < n; i++) arr[i + 1] = pre[b[i]];
 
-    for (int i = 0; i <= k; i++) dpknapsack[i] = 0;
+    debug(arr);
+    vector<vector<int>> dp(n + 1, vector<int>(k + 1));
 
-    for (int i = 0; i < n; i++) {
-        for (int x = k; x >= 0; x--) {
-            if (x + arr[i].first <= k) {
-            dpknapsack[x + arr[i].first] = 
-                max(dpknapsack[x + arr[i].first], dpknapsack[x] + arr[i].second);
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= k; j++) {
+            dp[i][j] = dp[i - 1][j];
+            if (j - arr[i] >= 0) {
+                dp[i][j] = max(dp[i][j], c[i - 1] + dp[i - 1][j - arr[i]]);
             }
         }
     }
 
-    int mx = 0;
-    for (int i = 0; i <= k; i++) mx = max(mx, dpknapsack[i]);
-    cout << mx << endl;
+    debug(dp);
+    cout << dp[n][k] << endl;
 }
 
 int32_t main () {
 	ios_base::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-    preprocess();
+    precompute();
 
-	int t = 1;
-	cin >> t;
-	while ( t-- ) {
-		solve();
+    int t = 1;
+    cin >> t;
+	while (t--) {
+        solve();
 	}
 }
 
