@@ -2,7 +2,6 @@
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 
-
 using namespace std;
 using namespace __gnu_pbds;
 // using namespace atcoder;
@@ -22,6 +21,39 @@ template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, t
 template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 void solve() {
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> numbers(m);
+    for (int i = 0 ;i < m; i++) cin >> numbers[i];
+
+    sort(numbers.begin(), numbers.end());
+
+    vector<int> answer(n + 1);
+
+    vector<set<int>> cannot(n + 1);
+    for (int i = 1; i <= n; i++) {
+        int curr = -1;
+        for (int j = m - 1; j >= 0; j--) {
+            if (cannot[i].count(j)) continue;
+            else {
+                curr = j;
+                break;
+            }
+        }
+        debug(i, curr);
+        if (curr == -1) {
+            cout << -1 << endl;
+            return;
+        }
+
+        answer[i] = numbers[curr];
+        for (int p = 2 * i; p <= n; p += i) cannot[p].insert(curr);
+        debug(cannot);
+    }
+
+    for (int i = 1; i <= n; i++) cout << answer[i] << " ";
+    cout << endl;
 }
 
 int32_t main () {

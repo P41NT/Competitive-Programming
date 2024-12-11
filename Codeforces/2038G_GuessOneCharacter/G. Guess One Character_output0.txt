@@ -1,0 +1,18 @@
+
+1 101 // how many times 101 occurs
+
+0 2 0 // guess: s[2] is 0
+
+
+1 00  // how many times 00 occurs
+
+1 0   // how many times 0 occurs
+
+0 1 1 // guess: s[1] is 1
+
+
+1 1   // how many times 1 occurs
+
+1 01  // how many times 01 occurs
+
+0 2 0 // guess: s[2] is 0

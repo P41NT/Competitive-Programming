@@ -22,6 +22,26 @@ template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, t
 template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 void solve() {
+    int q;
+    cin >> q;
+
+    int maxx = 0; int maxy = 0;
+    while (q--) {
+        char option;
+        int x, y;
+        cin >> option;
+        cin >> x >> y;
+
+        if (option == '+') {
+            maxx = max(min(x, y), maxx);
+            maxy = max(max(x, y), maxy);
+        }
+        else {
+            if (x > y) swap(x, y);
+            if (x >= maxx && y >= maxy) cout << "YES" << endl;
+            else cout << "NO" << endl;
+        }
+    }
 }
 
 int32_t main () {
@@ -29,7 +49,7 @@ int32_t main () {
 	cin.tie(0); cout.tie(0);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
 	while (t--) {
         solve();
 	}

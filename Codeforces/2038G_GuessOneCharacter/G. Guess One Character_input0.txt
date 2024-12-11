@@ -1,0 +1,20 @@
+3     // 3 test cases
+3     // the length of the string is 3
+
+1     // 101 occurs once
+
+1     // guessed correctly
+2     // the length of the string is 2
+
+0     // 00 occurs zero times
+
+0     // 0 occurs zero times
+
+1     // guessed correctly
+2     // the length of the string is 2
+
+1     // 1 occurs once
+
+0     // 01 occurs zero times
+
+1     // guessed correctly

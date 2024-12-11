@@ -22,6 +22,42 @@ template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, t
 template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 void solve() {
+    string s;
+    cin >> s;
+
+    int sm = 0;
+    int twofreq = 0;
+    int threefreq = 0;
+    for (int i = 0; i < s.size(); i++) { 
+        sm += s[i] - '0'; 
+        if (s[i] == '2') twofreq++;
+        if (s[i] == '3') threefreq++;
+    }
+
+    debug(s, sm);
+
+    if (sm % 9 == 0) {
+        cout << "YES" << endl;
+        return;
+    }
+    int required = 9 - (sm % 9);
+
+    debug(sm);
+    debug(required);
+    
+    vector<int> index = {0, 5, 1, 6, 2, 7, 3, 8, 4, 9};
+    int ind = index[required];
+
+    vector<int> possible(10, false);
+    for (int i = 0; i <= twofreq; i++) {
+        for (int j = 0; j <= threefreq && i + 3 * j <= 9; j++) {
+            possible[i + 3 * j] = true;
+        }
+    }
+    debug(twofreq, threefreq, possible);
+
+    if (possible[ind]) {cout << "YES" << endl;}
+    else cout << "NO" << endl;
 }
 
 int32_t main () {
