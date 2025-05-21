@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <cstdlib>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 
@@ -535,10 +534,10 @@ using is_dynamic_modint_t = std::enable_if_t<is_dynamic_modint<T>::value>;
 
 using namespace std;
 using namespace __gnu_pbds;
-using namespace atcoder;
+// using namespace atcoder;
 
 #ifndef ONLINE_JUDGE
-#include "/home/shobwq/Compocode/debug.cpp"
+#include "/home/shobwq/CompetitiveProgramming/debug.cpp"
 #define debug(...) std::cerr << __LINE__ << ": [", __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
 #else
 #define debug(...)
@@ -546,102 +545,101 @@ using namespace atcoder;
 #endif
 
 #define endl "\n"
-#define int unsigned long long
+#define int long long int
 
 template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-using mi = modint1000000007;
+using mi = atcoder::modint998244353;
+
+const int maxn = 1e6;
+vector<int> isPrime(maxn + 5, true);
+
+vector<mi> fact(maxn + 5);
+
+void precalc() {
+    isPrime[0] = false;
+    isPrime[1] = false;
+
+    for (int p = 2; p <= maxn; p++) {
+        if (!isPrime[p]) continue;
+        for (int q = 2 * p; q <= maxn; q += p) {
+            isPrime[q] = false;
+        }
+    }
+
+    fact[0] = (mi)1;
+    for (int i = 1; i <= maxn; i++) fact[i] = fact[i - 1] * i;
+}
 
 void solve() {
-    int q;
-    cin >> q;
+    int n;
+    cin >> n;
 
-    auto f = [](int x) -> int {
-        for (int32_t i = 61; i >= 0; i--) {
-            if (x & (1ull << i)) {
-                return i;
-            }
-        }
-        return 0;
-    };
+    vector<int> arr(2 * n);
+    for (int i = 0; i < 2 * n; i++) { cin >> arr[i]; }
 
-    auto g = [&](int x) -> mi {
-        int rq = f(x);
-        int curr = 1;
-        int mul = f(x);
-        while (rq <= x) {
-            rq *= mul;
-            curr++;
-        }
+    map<int, int> freq;
+    for (auto s : arr) freq[s]++;
 
-        return curr - 1;
-    };
-
-    vector<tuple<int, int, mi>> intervals;
-
-    for (int i = 2; i <= 60; i++) {
-        int start = 1ll << i;
-        int end = (1ll << (i + 1)) - 1;
-
-        if (g(start) == g(end)) {
-            intervals.push_back({start, end, g(start)});
-        }
-        else {
-            int lower = start;
-            int higher = end;
-            int answer = lower;
-            while (lower <= higher) {
-                int mid = (lower + higher) >> 1;
-                if (g(mid) == g(start)) {
-                    lower = mid + 1;
-                    answer = max(answer, mid);
-                }
-                else {
-                    higher = mid - 1;
-                }
-            }
-            intervals.push_back({start, answer, g(start)});
-            intervals.push_back({answer + 1, end, g(end)});
-        }
+    vector<int> nonprime;
+    vector<int> prime;
+    for (auto [a, b] : freq) {
+        if (isPrime[a]) prime.push_back(b);
+        else nonprime.push_back(b);
     }
 
-    for (auto [l, r, c] : intervals) {
-        debug(l, r, c.val());
+    mi answer = fact[n];
+    for (auto s : nonprime) answer /= fact[s];
+
+    int m = prime.size();
+    int k = m - n;
+
+    if (m - n < 0) {
+        cout << 0 << endl;
+        return;
     }
 
-    auto getCum = [&](int x) -> mi {
-        mi ans = 0;
-        for (auto [l, r, c] : intervals) {
-            if (l > x) return ans;
-            if (x <= r) {
-                ans += c * (x - l + 1);
-                return ans;
-            }
-            else {
-                ans += c * (r - l + 1);
-            }
-        }
-        return ans;
+    vector<mi> next;
+    for (auto s : prime) next.push_back((mi)1 / fact[s]);
+
+    for (auto s : next) std::cerr << s.val() << endl;
+
+    vector<vector<mi>> dp(m, vector<mi>(n + 1));
+    vector<vector<bool>> visited(m, vector<bool>(n + 1, false));
+
+    function<mi(int, int)> recur;
+    recur = [&](int i, int left) -> mi {
+        if (i == m && left == 0) return (mi)1;
+        else if (i == m) return 0;
+
+        if (visited[i][left]) return dp[i][left];
+        visited[i][left] = true;
+
+        if (left == 0) return dp[i][left] = ((mi)1 / fact[prime[i]]) * recur(i + 1, left);
+
+        mi ans = ((mi)1 / fact[prime[i]]) * recur(i + 1, left) + 
+            ((mi)1 / fact[prime[i] - 1]) * recur(i + 1, left - 1);
+
+        debug(i, left, ans.val());
+        return dp[i][left] = ans;
     };
 
-    while (q--) {
-        int l, r;
-        cin >> l >> r;
-        mi ans = getCum(r) - getCum(l - 1);
-        debug(getCum(r).val(), getCum(l - 1).val());
+    mi req = recur(0, n);
+    answer *= req;
 
-        cout << ans.val() << endl;
-    }
+    cout << answer.val() << endl;
 }
 
 int32_t main () {
 	ios_base::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
+    precalc();
     int t = 1;
     // cin >> t;
 	while (t--) {
         solve();
 	}
 }
+

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -21,6 +22,26 @@ template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, t
 template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(1, 0);
+    for (int i = 1; i <= n; i++) {
+        int x; cin >> x;
+        if (x == arr.back()) 
+            continue;
+        arr.push_back(x);
+    }
+    arr.push_back(0);
+
+    int answer = 0;
+    for (int i = 1; i < arr.size() - 1; i++) {
+        if (arr[i] > arr[i - 1] && arr[i] > arr[i + 1]) {
+            answer++;
+        }
+    }
+
+    cout << answer << endl;
 }
 
 int32_t main () {

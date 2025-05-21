@@ -7,7 +7,7 @@ using namespace __gnu_pbds;
 // using namespace atcoder;
 
 #ifndef ONLINE_JUDGE
-#include "/home/shobwq/Compocode/debug.cpp"
+#include "/home/shobwq/CompetitiveProgramming/debug.cpp"
 #define debug(...) std::cerr << __LINE__ << ": [", __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
 #else
 #define debug(...)
@@ -21,6 +21,40 @@ template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, t
 template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) cin >> arr[i];
+
+    map<int, vector<int>> adj;
+
+    for (int i = 0; i < n; i++) {
+        int start = arr[i] - (n - i);
+        int end = start + i;
+
+        if (start < 0) continue;
+        debug(start, end);
+
+        adj[start].push_back(end);
+    }
+
+    debug(adj);
+
+    set<int> visited;
+    function<void(int)> dfs;
+    dfs = [&](int curr) {
+        visited.insert(curr);
+        for (auto s : adj[curr]) {
+            if (visited.count(s)) continue;
+            dfs(s);
+        }
+    };
+
+    dfs(0);
+
+    int answer = *visited.rbegin();
+    cout << n + answer << endl;
 }
 
 int32_t main () {

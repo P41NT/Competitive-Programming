@@ -1,6 +1,8 @@
+#include <algorithm>
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
+#include <numeric>
 
 using namespace std;
 using namespace __gnu_pbds;
@@ -21,6 +23,18 @@ template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, t
 template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 void solve() {
+    int n, x;
+    cin >> n >> x;
+
+    vector<int> arr(n);
+
+    for (int i = 0; i < n; i++) cin >> arr[i];
+
+    int sm = accumulate(arr.begin(), arr.end(), 0ll);
+    int mx = *max_element(arr.begin(), arr.end());
+
+    int answer = max((sm / x + (sm % x != 0)), mx);
+    cout << answer << endl;
 }
 
 int32_t main () {

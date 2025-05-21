@@ -21,6 +21,25 @@ template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, t
 template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 void solve() {
+    int n;
+    cin >> n;
+
+    if (n & 1) {
+        cout << -1 << endl;
+        return;
+    }
+
+    for (int i = 0; i < 60; i++) {
+        if (n & (1ll << i) && (n & (1ll << (i + 1)))) {
+            cout << -1 << endl;
+            return;
+        }
+    }
+
+    int a = n / 2;
+    int b = (n | (n / 2));
+
+    cout << a << " " << b << endl;
 }
 
 int32_t main () {

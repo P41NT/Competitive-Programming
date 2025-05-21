@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
+#include <numeric>
 
 using namespace std;
 using namespace __gnu_pbds;
@@ -21,6 +22,31 @@ template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, t
 template<class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    bool flag = true;
+    bool flag2 = false;
+    for (int i = 0; i < n - 1; i++) {
+        if (arr[i] == 0) flag2 = true;
+        if (arr[i] == 0 && arr[i + 1] == 0) {
+            flag = false;
+            break;
+        }
+    }
+    if (arr[n - 1] == 0) flag2 = true;
+
+    if (flag && flag2) {
+        cout << "NO" << endl;
+    } else {
+        cout << "YES" << endl;
+    }
 }
 
 int32_t main () {
