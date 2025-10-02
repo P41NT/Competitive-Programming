@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.wenjun.codeepiphany.codeforces.settings">
+    <option name="languageSettings">
+      <list>
+        <LanguageSettingsState sourceFolder="\\wsl.localhost\Ubuntu\home\shobwq\Competitive-Programming\" language="cpp" languageVersion="17(GCC 7.3.0)" fileNameTemplate="${challenge.contestIdIndex}._$!velocity.camelCaseName(${challenge.name})/$!velocity.camelCaseName(${challenge.name})" codeTemplate="// ${challenge.contestIdIndex} ${challenge.name} - ${challenge.rating}&#10;${beginRegion}&#10;&#10;\#include &lt;bits/stdc++.h&gt;&#10;\#include &lt;ext/pb_ds/assoc_container.hpp&gt;&#10;\#include &lt;ext/pb_ds/tree_policy.hpp&gt;&#10;&#10;using namespace std;&#10;using namespace __gnu_pbds;&#10;&#10;#ifndef ONLINE_JUDGE&#10;\#include &quot;/home/shobwq/Competitive-Programming/debug.cpp&quot;&#10;\#define debug(...) std::cerr &lt;&lt; __LINE__ &lt;&lt; &quot;: [&quot;, __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)&#10;\#else&#10;\#define debug(...)&#10;\#define debugArr(...)&#10;#endif&#10;&#10;\#define int long long int&#10;&#10;template&lt;class T&gt; using ordered_set = tree&lt;T, null_type, std::less&lt;T&gt;, rb_tree_tag, tree_order_statistics_node_update&gt;;&#10;template&lt;class T&gt; using ordered_multiset = tree&lt;T, null_type, std::less_equal&lt;T&gt;, rb_tree_tag, tree_order_statistics_node_update&gt;;&#10;&#10;void solve() {&#10;}&#10;&#10;int32_t main () {&#10;    std::ios_base::sync_with_stdio(false);&#10;&#9;cin.tie(0); cout.tie(0);&#10;&#10;    int t = 1;&#10;    cin &gt;&gt; t;&#10;&#9;while (t--) {&#10;        solve();&#10;&#9;}&#10;}&#10;${endRegion}" />
+      </list>
+    </option>
+  </component>
+</project>
