@@ -1,58 +1,55 @@
 #include <bits/stdc++.h>
 
-using namespace std;
-
 namespace __DEBUG_UTIL__
 {
-    using namespace std;
     /* Primitive Datatypes Print */
-    void print(const char *x) { cerr << x; }
-    void print(bool x) { cerr << (x ? "T" : "F"); }
-    void print(char x) { cerr << '\'' << x << '\''; }
-    void print(signed short int x) { cerr << x; }
-    void print(unsigned short int x) { cerr << x; }
-    void print(signed int x) { cerr << x; }
-    void print(unsigned int x) { cerr << x; }
-    void print(signed long int x) { cerr << x; }
-    void print(unsigned long int x) { cerr << x; }
-    void print(signed long long int x) { cerr << x; }
-    void print(unsigned long long int x) { cerr << x; }
-    void print(float x) { cerr << x; }
-    void print(double x) { cerr << x; }
-    void print(long double x) { cerr << x; }
-    void print(string x) { cerr << '\"' << x << '\"'; }
+    void print(const char *x) { std::cerr << x; }
+    void print(bool x) { std::cerr << (x ? "T" : "F"); }
+    void print(char x) { std::cerr << '\'' << x << '\''; }
+    void print(signed short int x) { std::cerr << x; }
+    void print(unsigned short int x) { std::cerr << x; }
+    void print(signed int x) { std::cerr << x; }
+    void print(unsigned int x) { std::cerr << x; }
+    void print(signed long int x) { std::cerr << x; }
+    void print(unsigned long int x) { std::cerr << x; }
+    void print(signed long long int x) { std::cerr << x; }
+    void print(unsigned long long int x) { std::cerr << x; }
+    void print(float x) { std::cerr << x; }
+    void print(double x) { std::cerr << x; }
+    void print(long double x) { std::cerr << x; }
+    void print(std::string x) { std::cerr << '\"' << x << '\"'; }
     template <size_t N>
-    void print(bitset<N> x) { cerr << x; }
-    void print(vector<bool> v)
+    void print(std::bitset<N> x) { std::cerr << x; }
+    void print(std::vector<bool> v)
     { /* Overloaded this because stl optimizes vector<bool> by using
           _Bit_reference instead of bool to conserve space. */
         int f = 0;
-        cerr << '{';
+        std::cerr << '{';
         for (auto &&i : v)
-            cerr << (f++ ? "," : "") << (i ? "T" : "F");
-        cerr << "}";
+            std::cerr << (f++ ? "," : "") << (i ? "T" : "F");
+        std::cerr << "}";
     }
     /* Templates Declarations to support nested datatypes */
     template <typename T>
     void print(T &&x);
     template <typename T>
-    void print(vector<vector<T>> mat);
+    void print(std::vector<std::vector<T>> mat);
     template <typename T, size_t N, size_t M>
     void print(T (&mat)[N][M]);
     template <typename F, typename S>
-    void print(pair<F, S> x);
+    void print(std::pair<F, S> x);
     template <typename T, size_t N>
     struct Tuple;
     template <typename T>
     struct Tuple<T, 1>;
     template <typename... Args>
-    void print(tuple<Args...> t);
+    void print(std::tuple<Args...> t);
     template <typename... T>
-    void print(priority_queue<T...> pq);
+    void print(std::priority_queue<T...> pq);
     template <typename T>
-    void print(stack<T> st);
+    void print(std::stack<T> st);
     template <typename T>
-    void print(queue<T> q);
+    void print(std::queue<T> q);
     /* Template Datatypes Definitions */
     template <typename T>
     void print(T &&x)
@@ -60,41 +57,41 @@ namespace __DEBUG_UTIL__
         /*  This works for every container that supports range-based loop
             i.e. vector, set, map, oset, omap, dequeue */
         int f = 0;
-        cerr << '{';
+        std::cerr << '{';
         for (auto &&i : x)
-            cerr << (f++ ? "," : ""), print(i);
-        cerr << "}";
+            std::cerr << (f++ ? "," : ""), print(i);
+        std::cerr << "}";
     }
     template <typename T>
-    void print(vector<vector<T>> mat)
+    void print(std::vector<std::vector<T>> mat)
     {
         int f = 0;
-        cerr << "\n~~~~~\n";
+        std::cerr << "\n~~~~~\n";
         for (auto &&i : mat)
         {
-            cerr << setw(2) << left << f++, print(i), cerr << "\n";
+            std::cerr << std::setw(2) << std::left << f++, print(i), std::cerr << "\n";
         }
-        cerr << "~~~~~\n";
+        std::cerr << "~~~~~\n";
     }
     template <typename T, size_t N, size_t M>
     void print(T (&mat)[N][M])
     {
         int f = 0;
-        cerr << "\n~~~~~\n";
+        std::cerr << "\n~~~~~\n";
         for (auto &&i : mat)
         {
-            cerr << setw(2) << left << f++, print(i), cerr << "\n";
+            std::cerr << std::setw(2) << std::left << f++, print(i), std::cerr << "\n";
         }
-        cerr << "~~~~~\n";
+        std::cerr << "~~~~~\n";
     }
     template <typename F, typename S>
-    void print(pair<F, S> x)
+    void print(std::pair<F, S> x)
     {
-        cerr << '(';
+        std::cerr << '(';
         print(x.first);
-        cerr << ',';
+        std::cerr << ',';
         print(x.second);
-        cerr << ')';
+        std::cerr << ')';
     }
     template <typename T, size_t N>
     struct Tuple
@@ -102,47 +99,47 @@ namespace __DEBUG_UTIL__
         static void printTuple(T t)
         {
             Tuple<T, N - 1>::printTuple(t);
-            cerr << ",", print(get<N - 1>(t));
+            std::cerr << ",", print(std::get<N - 1>(t));
         }
     };
     template <typename T>
     struct Tuple<T, 1>
     {
-        static void printTuple(T t) { print(get<0>(t)); }
+        static void printTuple(T t) { print(std::get<0>(t)); }
     };
     template <typename... Args>
-    void print(tuple<Args...> t)
+    void print(std::tuple<Args...> t)
     {
-        cerr << "(";
+        std::cerr << "(";
         Tuple<decltype(t), sizeof...(Args)>::printTuple(t);
-        cerr << ")";
+        std::cerr << ")";
     }
     template <typename... T>
-    void print(priority_queue<T...> pq)
+    void print(std::priority_queue<T...> pq)
     {
         int f = 0;
-        cerr << '{';
+        std::cerr << '{';
         while (!pq.empty())
-            cerr << (f++ ? "," : ""), print(pq.top()), pq.pop();
-        cerr << "}";
+            std::cerr << (f++ ? "," : ""), print(pq.top()), pq.pop();
+        std::cerr << "}";
     }
     template <typename T>
-    void print(stack<T> st)
+    void print(std::stack<T> st)
     {
         int f = 0;
-        cerr << '{';
+        std::cerr << '{';
         while (!st.empty())
-            cerr << (f++ ? "," : ""), print(st.top()), st.pop();
-        cerr << "}";
+            std::cerr << (f++ ? "," : ""), print(st.top()), st.pop();
+        std::cerr << "}";
     }
     template <typename T>
-    void print(queue<T> q)
+    void print(std::queue<T> q)
     {
         int f = 0;
-        cerr << '{';
+        std::cerr << '{';
         while (!q.empty())
-            cerr << (f++ ? "," : ""), print(q.front()), q.pop();
-        cerr << "}";
+            std::cerr << (f++ ? "," : ""), print(q.front()), q.pop();
+        std::cerr << "}";
     }
     /* Printer functions */
     void printer(const char *) {} /* Base Recursive */
@@ -156,12 +153,12 @@ namespace __DEBUG_UTIL__
                 bracket++;
             else if (names[i] == ')' or names[i] == '>' or names[i] == '}')
                 bracket--;
-        cerr.write(names, i) << " = ";
+        std::cerr.write(names, i) << " = ";
         print(head);
         if (sizeof...(tail))
-            cerr << " ||", printer(names + i + 1, tail...);
+            std::cerr << " ||", printer(names + i + 1, tail...);
         else
-            cerr << "]\n";
+            std::cerr << "]\n";
     }
     /* PrinterArr */
     void printerArr(const char *) {} /* Base Recursive */
@@ -170,17 +167,17 @@ namespace __DEBUG_UTIL__
     {
         size_t ind = 0;
         for (; names[ind] and names[ind] != ','; ind++)
-            cerr << names[ind];
+            std::cerr << names[ind];
         for (ind++; names[ind] and names[ind] != ','; ind++)
             ;
-        cerr << " = {";
+        std::cerr << " = {";
         for (size_t i = 0; i < N; i++)
-            cerr << (i ? "," : ""), print(arr[i]);
-        cerr << "}";
+            std::cerr << (i ? "," : ""), print(arr[i]);
+        std::cerr << "}";
         if (sizeof...(tail))
-            cerr << " ||", printerArr(names + ind + 1, tail...);
+            std::cerr << " ||", printerArr(names + ind + 1, tail...);
         else
-            cerr << "]\n";
+            std::cerr << "]\n";
     }
 }
 

@@ -2,7 +2,6 @@
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 
-using namespace std;
 using namespace __gnu_pbds;
 
 #ifndef ONLINE_JUDGE
@@ -23,15 +22,16 @@ void solve() {
 
 int32_t main () {
     std::ios_base::sync_with_stdio(false);
-    cin.tie(0); cout.tie(0);
+    std::cin.tie(nullptr); std::cout.tie(nullptr);
 
-    #ifndef ONLINE_JUDGE
+#ifndef ONLINE_JUDGE
     freopen("input.txt", "r", stdin);
-    freopen("output/output.txt", "w", stdout);
-    freopen("/output.txt", "w", stdout);
+    freopen("output.txt", "r", stdout);
+    freopen("error.txt", "w", stderr);
+#endif
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while (t--) {
         solve();
     }
